@@ -1,1 +1,5 @@
+library(pheatmap)
 
+data<-read.table("290DI_heatmap.txt",header=T,sep="\t",row.names=1)
+
+pheatmap(data, cluster_cols=F,cluster_rows=T,number_color = "blue",clustering_method = "ward",legend_breaks = c(1:5), legend_labels = c("1=I","2=HR","3=R","4=T","5=S"),gaps_row = NULL,show_rownames = FALSE,color = colorRampPalette(rev(brewer.pal(n=20, name='RdBu')[3:10]))(round(11)))
