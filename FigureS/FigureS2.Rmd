@@ -1,0 +1,20 @@
+PT <- read.table("Desktop/Fig1/FigS2/file.txt",header = T)
+
+x <- PT$X20C.1
+
+h <-hist (x, col= "#F7B2BC",family="serif",tck=-0.02,mgp=c(1.8,0.5,0),xlab="Disease index",font.lab=2,font.axis=2,ylim = c(0,120),breaks = seq(0, 100,10),xaxt="n",main="20C-1")
+axis(side=1,at=seq(0, 100,10),tck=-0.02,family="serif",font.axis=2,mgp=c(1.8,0.5,0))
+
+xfit<-seq(min(x),max(x),length=40)
+
+meannum <- mean(x, na.rm = TRUE)
+
+sdnum <-sd(x,na.rm = TRUE)
+
+yfit <- dnorm(xfit, mean = meannum,sd=sdnum)
+
+yfit <- yfit*diff(h$mids[1:2]*length(x))
+
+lines(xfit,yfit,col="#ff4500",lwd=1)
+
+rug(jitter(x),side = 1,col="#3cb371",lwd = 0.2)
