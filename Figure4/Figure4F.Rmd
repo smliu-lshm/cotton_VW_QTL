@@ -1,0 +1,9 @@
+library(ggplot2)
+
+all <- read.table("all_cis_trans_merge_pve.txt",header = T)
+
+all$treatment <- factor(all$treatment, levels = c("M3", "D3", "M12", "D12"))
+
+e <- ggplot(all, aes(x = treatment, y = R2))
+
+e + geom_violin(aes(fill = eQTL), trim = FALSE, scale = 3) + scale_fill_manual(values=c("#A7CCE2","#fc8d59")) + geom_boxplot(aes(fill = eQTL), width = 0.2, position = position_dodge(width = 0.9), outlier.shape = NA) + theme(panel.grid = element_blank(), panel.background = element_blank(), axis.line = element_line())
