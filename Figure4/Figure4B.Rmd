@@ -1,0 +1,31 @@
+library(ggplot2)
+
+PCA <- read.table("all_treat_expre_filter_fpkm_for_pca.txt",header=T, row.names=1)
+
+non_zero_cols <- colSums(PCA[, 1:48430]) != 0
+
+com1 <- prcomp(PCA[, 1:48430][, non_zero_cols], center = TRUE, scale. = TRUE)
+
+df1<-com1$x
+
+df1<-data.frame(df1,PCA$treat)
+
+save(df1, file = "df1_PCA.RData")
+
+summ<-summary(com1)
+
+save(summ, file = "df1_summ.RData")
+
+load("df1_summ.RData")
+load("df1_PCA.RData")
+
+xlab<-paste0("PC1(",round(summ$importance[2,1]*100,2),"%)")
+ylab<-paste0("PC2(",round(summ$importance[2,2]*100,2),"%)")
+
+##排序
+df1$PCA.treat <- factor(df1$PCA.treat, levels = c("M3", "D3", "M12", "D12"))
+
+xlab <- paste0("PC1(", round(summ$importance[2, 1] * 100, 2), "%)")
+ylab <- paste0("PC2(", round(summ$importance[2, 2] * 100, 2), "%)")
+
+p1 <- ggplot(data = df1, aes(x = PC1, y = PC2, color = PCA.treat)) + stat_ellipse(aes(fill = PCA.treat), type = "norm", geom = "polygon", alpha = 0.2, color = NA) + geom_point(size = 0.8) + labs(x = xlab, y = ylab, color = "") + guides(fill = guide_legend(title = "PCA.treat", reverse = FALSE)) + theme(panel.grid = element_blank(), panel.background = element_blank(), axis.line = element_line())
