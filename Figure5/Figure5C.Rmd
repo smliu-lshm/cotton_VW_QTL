@@ -1,0 +1,11 @@
+library(reshape2)
+library(ggplot2)
+
+merge <- read.table("candidata_gene_zscore_abs_max_for_bubble.txt", header = TRUE, stringsAsFactors = FALSE)
+data_melt <- melt(merge)
+
+names(data_melt) <- c("Gene", "type","treatment", "value")
+
+data_melt$treatment <- factor(data_melt$treatment, levels = rev(levels(data_melt$treatment)))
+
+ggplot(data_melt, aes(x = Gene, y = treatment, color = type, size = abs(value))) + geom_point()  + scale_color_manual(values = c ("#EB4B17", "#03776A"))  + theme(panel.grid.major = element_line(colour = "gray",size=0.3),panel.background = element_blank(), axis.line = element_line(), panel.border = element_rect(colour="black",fill=NA), axis.text.x = element_text(angle = 45, hjust = 1))
