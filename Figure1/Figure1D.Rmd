@@ -1,0 +1,8 @@
+library(CMplot)
+
+target <- read.table("10QTL_merge_highlight_snp_list.txt",header=T,comment.char = "")
+
+all <- read.table("20phe_merge_forman_minimum_sort.txt",header = T)
+
+##png
+CMplot(all, plot.type="m",threshold=c(1e-5,1/2152153),threshold.lty=c(2,2), threshold.col=c("black","red"), col=c("#3F9394","#9DC8C8"),cex=0.2,signal.cex=0.2,highlight.cex=0.4,highlight = target$SNP,highlight.col= as.vector(target$color))
