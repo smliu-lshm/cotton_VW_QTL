@@ -1,0 +1,15 @@
+MKC <- read.table("3Y_MKC_y_ypredicted_DI.txt",header=T,check.names=F)
+
+p1 <- ggplot(MKC, aes(x = y, y = `y_predicted`))
+
+p2 <- p1 + geom_point(color = "#548687")
+
+p3 <- p2 + geom_smooth(method="lm", color = "#9DC3C1")
+
+cor_coeff <- cor(MKC$y, MKC$`y_predicted`)
+
+cor_test <- cor.test(MKC$y, MKC$`y_predicted`)
+
+p4 <- p3 + annotate("text", x = Inf, y = Inf, label = paste("Correlation coefficient:", round(cor_coeff, 3), "\n", "p-value:", round(cor_test$p.value, 3)), hjust = 1, vjust = 1) + theme(panel.grid = element_blank(), panel.background = element_blank(), axis.line = element_line())
+
+p4
