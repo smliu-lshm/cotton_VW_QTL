@@ -1,0 +1,5 @@
+library(CMplot)
+
+xj<-read.table("~/Desktop/forman/file_formanhattan.txt",header=T)
+
+CMplot(xj,plot.type="m",ylim=c(0,8),height=4,width=15,threshold=c(1/2152153,1e-5),threshold.col=c("black","black"),threshold.lty = c(1,2),threshold.lwd = c(1,1),amplify = F,signal.cex = c(0.2,0.2),cex = c(0.2,0.2),signal.pch=c(20,20),file.output=T,verbose=TRUE,col=c("#3E0A52","#423D77","#3F678B","#468C8D","#5FB47F","#9FD55C","#F9E956"),ylab.pos=1.6,file="pdf",dpi=500)
