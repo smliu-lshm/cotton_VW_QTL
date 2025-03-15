@@ -1,0 +1,7 @@
+library(ggplot2)
+
+data<-read.table("~/Desktop/FigureS11A.txt",header = T)
+
+p<-ggplot(data, aes(x = Values))
+
+p + geom_density(color = "black", fill = "#2a8c80", alpha=0.5) + xlim(0,1)
