@@ -1,0 +1,6 @@
+library(ggplot2)
+library(RColorBrewer)
+
+data.final<-read.table("Figure1E.txt",header=T)
+
+ggplot(data.final,aes(y=features.plot,x=id, colour = Type,size=Effect))+geom_point()+theme_bw()+theme(panel.grid = element_blank(), axis.text.x=element_text(angle=60,hjust = 0.5,vjust=0.5,size=12),axis.text.y=element_text(size=12))+labs(x=NULL,y=NULL)+scale_color_distiller(palette = "Spectral")
