@@ -1,0 +1,7 @@
+library(CMplot)
+
+all <- read.table("all_treat_fusion_merge_for_manhattan_method1.txt",header = T)
+
+target <- read.table("highlight_gene_and_color.txt",header=T,comment.char = "")
+
+CMplot(all, plot.type="m",threshold=c(0.05),height = 3.5, width = 12, col=c("#3F9394","#9DC8C8"), highlight = target$gene, highlight.col= as.vector(target$color3),highlight.cex=0.5,cex=0.25,signal.col=c("#FFFFFF"),file="pdf")
