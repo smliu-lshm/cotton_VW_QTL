@@ -1,0 +1,46 @@
+library(pheatmap)
+library(vegan) 
+library(circlize)
+library(RColorBrewer)
+
+##The number of cluster
+data<-read.table("~/Desktop/290DI_heatmap.txt",header=T,sep="\t",row.names=1)
+dim(data)
+data$cv <- apply(data, 1, function(x){
+  sd(x)/mean(x)*100
+})
+data_df <- data[order(data$cv, decreasing = T)[1:282], 1:5]
+dim(data_df)
+data_scale <- as.data.frame(t(apply(data_df,1,scale))) ##Z-score standardization
+names(data_scale) <- names(data_df)
+Heatmap(data_scale,name = "heatmap", 
+             column_names_side = "bottom",
+             col = colorRamp2(c(-2, 0, 2), c("green", "white", "red")),
+             cluster_columns = FALSE,
+             row_dend_side = "left",
+             show_row_names = FALSE
+             # km_title = "%i")
+#Figure S4A
+##SEE(sum of the squared error)
+wss <- (nrow(data_scale)-1)*sum(apply(data_scale,2,var))
+  for (i in 2:8) wss[i] <- sum(kmeans(data_scale,centers=i)$withinss)
+  plot(1:8, wss, type="b", xlab="Number of Clusters(K)",ylab="Within groups sum of squares")
+	
+#Figure S4B
+##silhouette coefficient
+library(fpc)
+K <- 2:8
+  round <- 30
+  rst <- sapply(K,function(i){
+    print(paste("K=",i))
+    mean(sapply(1:round,function(r){
+      print(paste("Round",r))
+      result <- kmeans(data_scale, i)
+      stats <- cluster.stats(dist(data_scale), result$cluster)
+      stats$avg.silwidth
+    }))
+  })
+  plot(K,rst,type='l',main='Number of Clusters(K)', ylab='Silhouette Score')
+
+#Figure S4C
+pheatmap(data, cluster_cols=F,cluster_rows=T,kmeans_k = 5,number_color = "blue",clustering_method = "complete",legend_breaks = c(1:5), legend_labels = c("1=I","2=HR","3=R","4=T","5=S"),annotation_legend = F,show_rownames = T,border_color = "grey")
