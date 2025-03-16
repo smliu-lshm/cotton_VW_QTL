@@ -1,0 +1,22 @@
+library(ggplot2)
+library(patchwork)
+
+data <- read.table("Gh_WLC_ZY_J_290_1095_HAP_20phe_for_boxplot.txt", header = TRUE, check.names = FALSE)
+
+plot_list <- list()
+
+for(i in 3:ncol(data)) {
+  var_name <- paste0("`", colnames(data)[i], "`")
+  p <- ggplot(data, aes_string(x = "Haplotype", y = var_name, fill = "Haplotype")) +
+       geom_boxplot(width = 0.6, alpha = 0.8, position = "dodge") +
+       geom_point(aes(color = Haplotype), position = position_jitter(width = 0.2), size = 0.01) +
+       scale_fill_manual(values = c("#379392", "#C89EC4", "#377EB8")) +
+       scale_color_manual(values = c("#379392", "#C89EC4", "#377EB8")) +
+       theme(axis.title.x=element_blank(), legend.position = "none")
+
+  plot_list[[i-2]] <- p
+}
+
+combined_plot <- wrap_plots(plotlist = plot_list, ncol = 4)
+
+ggsave("Gh_WLC_ZY_J_290_1095_HAP_20phe_boxplot.pdf", combined_plot, width = 20, height = 15, units = "cm")
