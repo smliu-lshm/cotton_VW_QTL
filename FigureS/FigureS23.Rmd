@@ -1,0 +1,15 @@
+merge <- read.table("1095_vs_J668_0h_3d_chl_peroxidase_DEG_fpkm.txt",header=T,row.names=1,check.names=F,quote="")
+
+annotation_row = read.table("DEG_0h_3d_chl_peroxidase_row_name.txt",sep="\t",header=F,row.names=1,check.names=F,quote="")
+
+colnames(annotation_row)=c("Class")
+
+annotation_col = data.frame(
+  Genotype = factor(c("J668","1095","J668","1095")), 
+  Treatment = factor(c("0dpi","0dpi","3dpi","3dpi"))
+)
+rownames(annotation_col) = c("J668_0h", "1095_0h", "J668_3d", "1095_3d")
+
+pheatmap(merge,cluster_row = FALSE,scale = "row",show_rownames=F,annotation_row = annotation_row,annotation_col = annotation_col)
+
+pheatmap(merge,cluster_row = FALSE, cluster_col = FALSE,scale = "row")
