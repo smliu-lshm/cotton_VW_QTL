@@ -1,0 +1,38 @@
+library(trackViewer)
+library(RColorBrewer)
+
+SNP <- c(-1995, -1872, -1072, -1058, -672, -610, -568, -373, -304, 640, 1086, 1242)
+
+sample.gr <- GRanges("chr1", IRanges(SNP, width=1, names=paste0(SNP)))
+
+features_2 <- GRanges("chr1", IRanges(c(-2000,1,185,557,730,916,1197),
+                                    width=c(2000,72,37,74,94,83,168),
+                                    names=paste0("block", 1:7)))
+
+features_2$fill <-  c("#50C8E7","#E0A429","#E0A429","#E0A429","#E0A429","#E0A429","#E0A429")
+
+features_2$height <- c(0.02)
+
+sample.gr$score <- NULL ## must be removed, because pie will consider all the numeric columns except column "color", "fill", "lwd", "id" and "id.col".
+sample.gr$label <- NULL
+sample.gr$label.col <- NULL
+
+x <- c(59.0432,99.0741,99.0741,99.5988,55.7716,99.0741,99.0741,56.6975,59.0432,97.1296,55.4012,98.3642)
+
+sample.gr$value1 <- x
+sample.gr$value2 <- 100 - x
+## the length of color should be no less than the values number
+sample.gr$color <- rep(list(c("#87CEFA", '#98CE31')), length(SNP))
+sample.gr$border <- "gray30"
+
+legends <- list(labels=c("ref", "alt"), fill=c("#87CEFA", '#98CE31'))
+
+xaxis <- c(-2000, -1000, 1, 500, 1000, 1500) ## define the position
+
+names(xaxis) <- xaxis
+
+pdf("Gh_WLC_1095_structure_variation.pdf") 
+
+lolliplot(sample.gr, features_2, xaxis=xaxis, type="pie", legend=legends)
+
+dev.off()
