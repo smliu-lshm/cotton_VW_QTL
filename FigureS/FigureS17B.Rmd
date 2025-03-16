@@ -1,0 +1,50 @@
+library(tidyverse)
+
+library(dplyr)
+
+D12 <- read.table("D12_eQTL_egene_for_dotplot.txt",header = T)
+
+chr_len <- D12 %>% 
+  group_by(snp_chr) %>% 
+  summarise(chr_len=max(snp_bp))
+
+
+chr_pos <- chr_len  %>% 
+  mutate(total = cumsum(as.numeric(chr_len)) - chr_len) %>%
+  select(-chr_len)
+
+snp_pos <- chr_pos %>%
+  left_join(D12, ., by="snp_chr") %>%
+  arrange(snp_chr, snp_bp) %>%
+  mutate( snp_bp_cum = snp_bp + total)
+  
+
+D12D12 <- read.table("D12_eQTL_egene_for_dotplot_new.txt",header = T)
+
+
+chr_len <- D12D12 %>% 
+  group_by(gene_chr) %>% 
+  summarise(chr_len=max(gene_bp))
+
+
+chr_pos <- chr_len  %>% 
+  mutate(total2 = cumsum(as.numeric(chr_len)) - chr_len) %>%
+  select(-chr_len)
+
+gene_pos <- chr_pos %>%
+  left_join(D12D12, ., by="gene_chr") %>%
+  arrange(gene_chr, gene_bp) %>%
+  mutate( gene_bp_cum = gene_bp + total2)
+
+X_axis <- gene_pos %>% group_by(snp_chr) %>% summarize(center=( max(snp_bp_cum) + min(snp_bp_cum) ) / 2 )
+
+Y_axis <- gene_pos %>% group_by(gene_chr) %>% summarize(center=( max(gene_bp_cum) + min(gene_bp_cum) ) / 2 )
+
+snpinterest <- read.csv("D12_snps_of_interest.txt")
+
+interest <- as.vector(snpinterest$snp)
+
+data <- gene_pos %>%
+mutate( is_highlight=ifelse(snp %in% interest , "yes", "no")) 
+
+ggplot(gene_pos,aes(x=snp_bp_cum,y=gene_bp_cum)) + geom_point(aes(color=as.factor(snp_chr)),size=0.2) + scale_x_continuous( label = X_axis$snp_chr, breaks= X_axis$center ) + scale_y_continuous( label = Y_axis$gene_chr, breaks= Y_axis$center ) + scale_color_manual(values = rep(c("#48D1CC", "#48D1CC"), 26 )) + geom_point(data=subset(data, is_highlight=="yes"), color="#FF6347", size=0.001) + theme_bw()
