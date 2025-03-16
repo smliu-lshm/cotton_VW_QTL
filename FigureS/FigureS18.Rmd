@@ -1,0 +1,7 @@
+merge <- read.csv("sig_ICA_GO_for_plot.csv", header = TRUE, stringsAsFactors = FALSE)
+
+merge$treatment <- factor(merge$treatment, levels = rev(c("M3", "D3", "M12", "D12")))
+
+merge$GO <- factor(merge$GO, levels = unique(merge$GO))
+
+p <- ggplot(merge, aes(x = GO, y = treatment, color = -1*log10(FDR), size = count)) + geom_point()  + scale_color_gradient(low="#03776A",high = "#EB4B17")  + theme(panel.grid.major = element_line(colour = "gray",size=0.3),panel.background = element_blank(), axis.line = element_line(), panel.border = element_rect(colour="black",fill=NA), axis.text.x = element_text(angle = -60, hjust = 0))
