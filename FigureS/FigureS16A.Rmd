@@ -1,0 +1,9 @@
+library (ggplot2)
+
+merge <- read.csv("all_treat_cluster_DEG_GO_MF_for_plot.csv", header = TRUE, stringsAsFactors = FALSE)
+
+merge$treatment <- factor(merge$treatment, levels = c("D3_M3_cluster1", "D3_M3_cluster2", "D3_M3_cluster3", "D12_M12_cluster1", "D12_M12_cluster2", "D12_M12_cluster3"))
+
+merge$annotation <- factor(merge$annotation, levels = unique(merge$annotation))
+
+ggplot(merge, aes(x = treatment, y = annotation, color = -1*log10(FDR), size = count)) + geom_point()  + scale_color_gradient(low="#03776A",high = "#EB4B17")  + theme(panel.grid.major = element_line(colour = "gray",size=0.3),panel.background = element_blank(), axis.line = element_line(), panel.border = element_rect(colour="black",fill=NA), axis.text.x = element_text(angle = -60, hjust = 0))
