@@ -1,0 +1,16 @@
+library(pheatmap)
+library(ggplot2)
+
+colors <- colorRampPalette(c("blue", "white", "red"))(100)
+
+D12_M12_all <- read.table("D12_M12_DEG_VW_all_gene_fpkm.txt",header=T,row.names=1,check.names=F,quote="")
+
+annotation_col_D12_M12 = read.table("M12_D12_col_name.txt",sep="\t",header=T,row.names=1,check.names=F,quote="")
+
+annotation_row_D12_M12 = read.table("M12_D12_row_name.txt",sep="\t",header=T,row.names=1,check.names=F,quote="")
+
+ann_color = list(Treatment = c(M12 = "#41C6CC", D12 = "#DE7E73"), cluster =c(cluster1 = "#379392", cluster2 = "#C89EC4", cluster3 = "#9DC8C8"))  
+
+p1 <- pheatmap(D12_M12_all,cluster_row = FALSE, cluster_col = FALSE,scale = "row",show_colnames=F,show_rownames=F,breaks = seq(-3,3,length.out = 100), annotation_col = annotation_col_D12_M12, annotation_row = annotation_row_D12_M12, color = colors, annotation_names_row = FALSE, annotation_names_col = FALSE, annotation_legend = FALSE, annotation_colors = ann_color)
+
+ggsave("D12_M12_DEG_VW_all_heatmap.png", plot = p1, width = 5, height = 6)
