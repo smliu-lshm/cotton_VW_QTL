@@ -1,0 +1,14 @@
+library(CMplot)
+
+M3 <- read.table("M3_all_phe_fdr_merge_minimum_sort.txt",header = T)
+CMplot(M3, plot.type="m",threshold=c(0.05),col=c("#3F9394","#9DC8C8"), cex=0.5, signal.cex=1)
+
+D3 <- read.table("D3_all_phe_fdr_merge_minimum_sort.txt",header = T)
+CMplot(D3, plot.type="m",threshold=c(0.05),col=c("#3F9394","#9DC8C8"), cex=0.5, signal.cex=1)
+
+M12 <- read.table("M12_all_phe_fdr_merge_minimum_sort.txt",header = T)
+CMplot(M12, plot.type="m",threshold=c(0.05),col=c("#3F9394","#9DC8C8"), cex=0.5, signal.cex=1)
+
+D12 <- read.table("D12_all_phe_fdr_merge_minimum_sort.txt",header = T)
+CMplot(D12, plot.type="m",threshold=c(0.05),col=c("#3F9394","#9DC8C8"), cex=0.5, signal.cex=1, file.name="D12_all_phe_fdr_merge_minimum_manhattan")
+
